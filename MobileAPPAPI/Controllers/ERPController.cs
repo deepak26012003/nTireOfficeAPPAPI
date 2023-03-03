@@ -89,13 +89,6 @@ namespace MobileAppAPI.Controllers
                 return Ok(Logdata1);
             }
         }
-
-
-
-
-
-
-
         [HttpPost]
         [Route("listvendor_items")]
         public async Task<ActionResult<ERP>> listvendor_items(ERP data)
@@ -126,10 +119,6 @@ namespace MobileAppAPI.Controllers
                 return Ok(Logdata1);
             }
         }
-
-
-
-
 
         [HttpPost]
         [Route("getAllBranches")]
@@ -169,9 +158,7 @@ namespace MobileAppAPI.Controllers
         }
 
 
-
-
-        [HttpPost]
+      [HttpPost]
         [Route("vendor_detail")]
         public async Task<ActionResult<ERP>> vendor_detail(ERP data)
         {
@@ -2242,9 +2229,7 @@ namespace MobileAppAPI.Controllers
 
             try
             {
-
-
-                using (SqlConnection dbConn = new SqlConnection(strconn))
+           using (SqlConnection dbConn = new SqlConnection(strconn))
                 {
 
 
@@ -2385,9 +2370,28 @@ namespace MobileAppAPI.Controllers
                     {
                         data.FROMDATEP = "";
                     }
+                    else
+                    {
+                        string date = data.FROMDATEP;
+                        //DateTime dt = DateTime.Parse(date);
+                        //dt.ToString("dd/MM/yyyy");
+                        //fromdate = dt.ToString();
+
+                        fromdate = DateTime.ParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture).ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
+
+
+                    }
                     if (data.TODATEP.ToString() == "0" || data.TODATEP.ToString() == "" || data.TODATEP.ToString() == string.Empty || data.TODATEP.ToString() == null)
                     {
                         data.TODATEP = "";
+                    }
+                    else
+                    {
+                        string date = data.TODATEP;
+                        //DateTime dt = DateTime.Parse(date);
+                        //dt.ToString("dd/MM/yyyy");
+                        todate = DateTime.ParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture).ToString("dd/MM/yyyy",
+CultureInfo.InvariantCulture);
                     }
 
                     if (data.ITEMCODEP.ToString() == "0" || data.ITEMCODEP.ToString() == "" || data.ITEMCODEP.ToString() == string.Empty || data.ITEMCODEP.ToString() == null)
@@ -2422,7 +2426,24 @@ namespace MobileAppAPI.Controllers
                     {
                         data.modep = "0";
                     }
-
+                    string strFDate = string.Empty;
+                    string strTDate = string.Empty;
+                    if (data.FROMDATEP.ToString() != "0" && data.FROMDATEP.ToString() != "" && data.FROMDATEP.ToString() != string.Empty && data.FROMDATEP.ToString() != null)
+                    {
+                        strFDate = Convert.ToDateTime(data.FROMDATEP.ToString()).ToString("dd/MM/yyyy");
+                    }
+                    else
+                    {
+                        strFDate = data.FROMDATEP.ToString();
+                    }
+                    if (data.TODATEP.ToString() != "0" && data.TODATEP.ToString() != "" && data.TODATEP.ToString() != string.Empty && data.TODATEP.ToString() != null)
+                    {
+                        strTDate = Convert.ToDateTime(data.TODATEP.ToString()).ToString("dd/MM/yyyy");
+                    }
+                    else
+                    {
+                        strTDate = data.TODATEP.ToString();
+                    }
 
 
                     DataSet dsuserdetails = new DataSet();
@@ -2436,8 +2457,8 @@ namespace MobileAppAPI.Controllers
                     cmd.Parameters.AddWithValue("@FUNCTIONID", data.FUNCTIONIDP);
                     cmd.Parameters.AddWithValue("@BRANCHID", data.BRANCHIDP);
                     cmd.Parameters.AddWithValue("@RFQCODE", data.RFQCODEP);
-                    cmd.Parameters.AddWithValue("@FROMDATE", data.FROMDATEP);
-                    cmd.Parameters.AddWithValue("@TODATE",data.TODATEP);
+                    cmd.Parameters.AddWithValue("@FROMDATE", strFDate.ToString());
+                    cmd.Parameters.AddWithValue("@TODATE", strTDate.ToString());
                     cmd.Parameters.AddWithValue("@ITEMCODE", data.ITEMCODEP);
                     cmd.Parameters.AddWithValue("@VENDORID", data.VENDORIDP);
                     cmd.Parameters.AddWithValue("@QUOTEREF", data.QUOTEREFP);
@@ -2452,7 +2473,7 @@ namespace MobileAppAPI.Controllers
                     cmd.Parameters.AddWithValue("@VENDORCODE", data.VENDORCODEP);
 
 
-                    //EXEC ERP_VENDORQUOTATION_SUMMARY '1','1','0','','','0','0','','0','0','20','QUOTE_id desc','0','2',''
+                    //EXEC ERP_VENDORQUOTATION_SUMMARY '1','1','0','','','0','0','','0','0','50','QUOTE_id desc','0','2',''
                     //Added Catid and subcatid
                     //cmd.ExecuteNonQuery();
                     var reader = cmd.ExecuteReader();
@@ -3632,12 +3653,8 @@ namespace MobileAppAPI.Controllers
 
             try
             {
-
-
                 using (SqlConnection dbConn = new SqlConnection(strconn))
                 {
-
-
                     if (data.FUNCTIONIDM.ToString() == "0" || data.FUNCTIONIDM.ToString() == "" || data.FUNCTIONIDM.ToString() == string.Empty || data.FUNCTIONIDM.ToString() == null || data.FUNCTIONIDM.ToString() == "null")
                     {
                         data.FUNCTIONIDM = "0";
@@ -3652,17 +3669,11 @@ namespace MobileAppAPI.Controllers
                         data.MRSCODEM = "";
                     }
 
-
-
-
                     if (data.ITEMCODEM.ToString() == "0" || data.ITEMCODEM.ToString() == "" || data.ITEMCODEM.ToString() == string.Empty || data.ITEMCODEM.ToString() == null || data.ITEMCODEM.ToString() == "null" )
                     {
                         data.ITEMCODEM = "";
                     }
-
-
-
-                    if (data.DATEFROMM.ToString() == "0" || data.DATEFROMM.ToString() == "" || data.DATEFROMM.ToString() == string.Empty || data.DATEFROMM.ToString() == null || data.DATEFROMM.ToString() == "null")
+                if (data.DATEFROMM.ToString() == "0" || data.DATEFROMM.ToString() == "" || data.DATEFROMM.ToString() == string.Empty || data.DATEFROMM.ToString() == null || data.DATEFROMM.ToString() == "null")
                     {
                         data.DATEFROMM = "";
                     }
@@ -3716,7 +3727,7 @@ namespace MobileAppAPI.Controllers
 
                          string sql = "ERP_MRS_GET_SUMMARYDATA";
                     SqlCommand cmd = new SqlCommand(sql, dbConn);
-                    // exec ERP_MRS_GET_SUMMARYDATA @FUNCTIONID='1',@BRANCH='1',@MRSCODE='',@ITEMCODE='',@DATEFROM='',@DATETO='',@STATUS='0',@CUTSTATUS='<<Select>>',@MENUID='',@PAGEINDEX='0',@PAGESIZE='10',@SORTEXPRESSION='mrs_code',@ALPHANAME='',@USERTYPE='1',@USERID='286'
+                    // exec ERP_MRS_GET_SUMMARYDATA @FUNCTIONID='1',@BRANCH='1',@MRSCODE='',@ITEMCODE='ITE',@DATEFROM='',@DATETO='',@STATUS='',@CUTSTATUS='<<Select>>',@MENUID='',@PAGEINDEX='0',@PAGESIZE='10',@SORTEXPRESSION='mrs_code',@ALPHANAME='',@USERTYPE='1',@USERID='1'
 
 
                     cmd.CommandType = CommandType.StoredProcedure;
